@@ -212,6 +212,9 @@ def sacar():
                     if  saque <= 0:
                         print('O VALOR DO SAQUE DEVE SER MAIOR QUE R$0,00')
                         continue
+                    elif saque <= saldo_inicial:
+                        usando_credito = False
+                        usando_credito_e_saldo = False
                     elif saque > saldo_inicial and saque <= credito:
                         print('VOCÊ ESTÁ USANDO O SEU LIMITE DE CRÉDITO')
                         usando_credito = True
@@ -221,7 +224,7 @@ def sacar():
                     elif saque > saldo_inicial and saque > credito:
                         print('VOCÊ NÃO POSSUI SALDO SUFICIENTE PARA ESSA TRANSAÇÃO')
                         continue
-                    if saque <= saldo_inicial or saque > saldo_inicial and saque <= credito or saque > saldo_inicial and saque <= (saldo_inicial + credito):
+                    if saque <= saldo_inicial or usando_credito_e_saldo == True or usando_credito == True:
                         confirmar_saque = input(f'CONFIRMAR SAQUE NO VALOR DE {saque} ? SIM(S) NÃO(N): ').upper()
                         if confirmar_saque == 'S':
                             if usando_credito == True:
@@ -265,7 +268,11 @@ def sacar():
 def consultar_saldo():
     print(f'SALDO DA CONTA: R${dados_cadastro[4]}')
     print(f'SALDO DE CRÉDITO: {dados_cadastro[5]}')
-    menu()
+    voltar_ao_menu = input('PRESSIONE *ENTER* PARA VOLTAR AO MENU: ')
+    if voltar_ao_menu == '':
+        menu()
+    else:
+        menu()
 
 def consultar_extrato():
     pass
