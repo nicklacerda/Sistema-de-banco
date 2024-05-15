@@ -4,36 +4,61 @@ import os
 #MENU
 
 dados_cadastro = []
-
+conta_bloqueada = False
+dados_extrato = []
 def menu():
     while True:
-        print('MACK BANK – ESCOLHA UMA OPÇÃO'
-              '\n')
-        print('(1) CADASTRAR CONTA CORRENTE')
-        print('(2) DEPOSITAR')
-        print('(3) SACAR')
-        print('(4) CONSULTAR SALDO')
-        print('(5) CONSULTAR EXTRATO')
-        print('(6) FINALIZAR'
-              '\n')
-        opcao = input('SUA OPÇÃO: ')
-
-        if opcao == "1":
-            cadastrar_conta_corrente()
-        elif opcao == "2":
-            depositar()
-        elif opcao == "3":
-            sacar()
-        elif opcao == "4":
-            consultar_saldo()
-        elif opcao == "5":
-            consultar_extrato()
-        elif opcao == "6":
-            print("Finalizando o programa...")
-            break
+        if conta_bloqueada == False:
+            print()
+            print('MACK BANK – ESCOLHA UMA OPÇÃO'
+                '\n')
+            print('(1) CADASTRAR CONTA CORRENTE')
+            print('(2) DEPOSITAR')
+            print('(3) SACAR')
+            print('(4) CONSULTAR SALDO')
+            print('(5) CONSULTAR EXTRATO')
+            print('(6) FINALIZAR'
+                '\n')
+            opcao = input('SUA OPÇÃO: ')
+        
+            if opcao == "1":
+                cadastrar_conta_corrente()
+            elif opcao == "2":
+                depositar()
+            elif opcao == "3":
+                sacar()
+            elif opcao == "4":
+                consultar_saldo()
+            elif opcao == "5":
+                consultar_extrato()
+            elif opcao == "6":
+                print("Finalizando o programa...")
+                break
+            else:
+                print("Opção inválida. Por favor, escolha uma opção válida.")
         else:
-            print("Opção inválida. Por favor, escolha uma opção válida.")
-
+            print()
+            print('MACK BANK – ESCOLHA UMA OPÇÃO'
+                '\n')
+            print('(1) CADASTRAR CONTA CORRENTE')
+            print('(2) DEPOSITAR')
+            print('(̶3̶)̶ S̶A̶C̶A̶R̶  : OPÇÃO BLOQUEADA')
+            print('(̶4̶)̶ C̶O̶N̶S̶U̶L̶T̶A̶R̶ S̶A̶L̶D̶O̶  : OPÇÃO BLOQUEADA')
+            print('(̶5̶)̶ C̶O̶N̶S̶U̶L̶T̶A̶R̶ E̶X̶T̶R̶A̶T̶O̶  : OPÇÃO BLOQUEADA')
+            print('(6) FINALIZAR'
+                '\n')
+            opcao = input('SUA OPÇÃO: ')
+            if opcao == "1":
+                cadastrar_conta_corrente()
+            elif opcao == "2":
+                depositar()
+            elif opcao == "6":
+                os.system('cls||clear')
+                print("FINALIZANDO PROGRAMA...")
+                print('PROGRAMA FINALIZADO. OBRIGADO POR ACESSAR O MACKBANK!')
+                break
+            else:
+                print("Opção inválida. Por favor, escolha uma opção válida.")
 
 # CADASTRO
 
@@ -41,6 +66,7 @@ def cadastrar_conta_corrente():
     numero_da_conta = random.randint(1000,10000)
     cadastro_salvo = 0
     os.system('cls||clear')
+
     while True:
         print(f'NÚMERO DA CONTA: {numero_da_conta}')
 
@@ -89,7 +115,7 @@ def cadastrar_conta_corrente():
                 continue
             else:
                 cadastro_salvo += 1
-
+        dados_extrato.append(- saldo_inicial)
 
         if cadastro_salvo >= 5:
             print(f'LIMITE DE CRÉDITO: {limite_de_credito}')
@@ -132,9 +158,6 @@ def cadastrar_conta_corrente():
                 else:
                     menu()
                     break
-
-    
-
 
 
 #DEPOSITO
@@ -193,8 +216,10 @@ def sacar():
     tentativas_erro = 3
     print(numero_certo)
     while True:
-        if tentativas > 3:
+        if tentativas > 3 :
                     print('VOCÊ ATINGIU O LIMITE DE TENTATIVAS. SUA CONTA SERÁ BLOQUEADA E VOCÊ SERÁ REDIRECIONADO AO MENU', '\n')
+                    global conta_bloqueada
+                    conta_bloqueada = True
                     menu()
                     break
         numero_digitado = int(input('DIGITE O NÚMERO DA CONTA: '))
@@ -215,12 +240,12 @@ def sacar():
                     elif saque <= saldo_inicial:
                         usando_credito = False
                         usando_credito_e_saldo = False
-                    elif saque > saldo_inicial and saque <= credito:
-                        print('VOCÊ ESTÁ USANDO O SEU LIMITE DE CRÉDITO')
-                        usando_credito = True
                     elif saque > saldo_inicial and saque <= (saldo_inicial + credito):
                         print('VOCÊ ESTÁ USANDO TODO SEU SALDO E O SEU LIMITE DE CRÉDITO')
                         usando_credito_e_saldo = True
+                    elif saque > saldo_inicial and saque <= credito :
+                        print('VOCÊ ESTÁ USANDO O SEU LIMITE DE CRÉDITO')
+                        usando_credito = True
                     elif saque > saldo_inicial and saque > credito:
                         print('VOCÊ NÃO POSSUI SALDO SUFICIENTE PARA ESSA TRANSAÇÃO')
                         continue
@@ -261,22 +286,100 @@ def sacar():
             continue
 
 
-
-
 #CONSULTAR SALDO
 
 def consultar_saldo():
-    print(f'SALDO DA CONTA: R${dados_cadastro[4]}')
-    print(f'SALDO DE CRÉDITO: {dados_cadastro[5]}')
-    voltar_ao_menu = input('PRESSIONE *ENTER* PARA VOLTAR AO MENU: ')
-    if voltar_ao_menu == '':
-        menu()
-    else:
-        menu()
+    os.system('cls||clear')
+    nome_cliente = dados_cadastro[1]
+    numero_certo = dados_cadastro[0]
+    senha_certa = dados_cadastro[6]
+    tentativas = 0
+    tentativas_erro = 3
+    print(f'{numero_certo}')
+    while True:
+        if tentativas > 3 :
+                    print('VOCÊ ATINGIU O LIMITE DE TENTATIVAS. SUA CONTA SERÁ BLOQUEADA E VOCÊ SERÁ REDIRECIONADO AO MENU', '\n')
+                    global conta_bloqueada
+                    conta_bloqueada = True
+                    menu()
+                    break
+        numero_digitado = int(input('DIGITE O NÚMERO DA CONTA: '))
+        print(f'Número digitado: {numero_digitado}')
+        if numero_certo == numero_digitado:
+            print(f'NOME DO CLIENTE: {nome_cliente}')
+            while tentativas <= 3:
+                senha = input('DIGITE A SENHA: ')
+                if senha == senha_certa:
+
+                    print(f'SALDO DA CONTA: R${dados_cadastro[4]}')
+                    print(f'SALDO DE CRÉDITO: {dados_cadastro[5]}')
+                    voltar_ao_menu = input('PRESSIONE *ENTER* PARA VOLTAR AO MENU: ')
+                    if voltar_ao_menu == '':
+                        menu()
+                        break
+                    else:
+                        menu()
+                        break   
+
+                else:
+                    tentativas_erro -= 1
+                    if tentativas_erro >= 0:
+                        print(f'SENHA INCORRETA - VOCÊ POSSUI MAIS {tentativas_erro} TENTATIVAS ANTES DA SUA CONTA SER BLOQUEADA')
+                    tentativas += 1
+                    continue
+
+        else:
+            alerta = 'NÚMERO DE CONTA INEXISTENTE'
+            print(len(alerta)*'-')
+            print(alerta)
+            print(len(alerta)*'-')
+            continue
 
 def consultar_extrato():
-    pass
+    os.system('cls||clear')
+    nome_cliente = dados_cadastro[1]
+    numero_certo = dados_cadastro[0]
+    senha_certa = dados_cadastro[6]
+    tentativas = 0
+    tentativas_erro = 3
+    print(f'{numero_certo}')
+    while True:
+        if tentativas > 3 :
+                    print('VOCÊ ATINGIU O LIMITE DE TENTATIVAS. SUA CONTA SERÁ BLOQUEADA E VOCÊ SERÁ REDIRECIONADO AO MENU', '\n')
+                    global conta_bloqueada
+                    conta_bloqueada = True
+                    menu()
+                    break
+        numero_digitado = int(input('DIGITE O NÚMERO DA CONTA: '))
+        print(f'Número digitado: {numero_digitado}')
+        if numero_certo == numero_digitado:
+            print(f'NOME DO CLIENTE: {nome_cliente}')
+            while tentativas <= 3:
+                senha = input('DIGITE A SENHA: ')
+                if senha == senha_certa:
 
+                    print(f'SALDO DA CONTA: R${dados_cadastro[4]}')
+                    print(f'SALDO DE CRÉDITO: {dados_cadastro[5]}')
+                    voltar_ao_menu = input('PRESSIONE *ENTER* PARA VOLTAR AO MENU: ')
+                    if voltar_ao_menu == '':
+                        menu()
+                        break
+                    else:
+                        menu()
+                        break   
 
+                else:
+                    tentativas_erro -= 1
+                    if tentativas_erro >= 0:
+                        print(f'SENHA INCORRETA - VOCÊ POSSUI MAIS {tentativas_erro} TENTATIVAS ANTES DA SUA CONTA SER BLOQUEADA')
+                    tentativas += 1
+                    continue
+
+        else:
+            alerta = 'NÚMERO DE CONTA INEXISTENTE'
+            print(len(alerta)*'-')
+            print(alerta)
+            print(len(alerta)*'-')
+            continue
 
 menu()
