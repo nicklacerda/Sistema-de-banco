@@ -160,7 +160,6 @@ def cadastrar_conta_corrente():
                 continue
             else:
                 cadastro_salvo += 1
-        dados_extrato.append(- saldo_inicial)
 
         if cadastro_salvo >= 5:
             print(f'LIMITE DE CRÉDITO: {limite_de_credito}')
