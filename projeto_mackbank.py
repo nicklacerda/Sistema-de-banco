@@ -1,11 +1,41 @@
+#POR FAVOR UTILIZE O COMANDO 'pip install keyboard' NO SEU TERMINAL ANTES DE RODAR O CÓDIGO
+
+import keyboard
+import sys
+import time
 import random
 import os
+
+#SENHA DIGITADA COMO *
+
+def senha_digitada(prompt="Password: "):
+    print(prompt, end="", flush=True)
+    senha = ""
+    while True:
+        event = keyboard.read_event(suppress=True)  # Suprimir o evento para evitar saída duplicada
+        if event.event_type == keyboard.KEY_DOWN:
+            if event.name == "enter":
+                break
+            elif event.name == "backspace":
+                if senha:
+                    senha = senha[:-1]
+                    sys.stdout.write("\b \b")
+                    sys.stdout.flush()
+            else:
+                if len(event.name) == 1:  # Garantir que seja um único caractere
+                    senha += event.name
+                    sys.stdout.write("*")
+                    sys.stdout.flush()
+        time.sleep(0.01)
+    print()  # Ir para a próxima linha após a entrada da senha
+    return senha
 
 #MENU
 
 dados_cadastro = []
 conta_bloqueada = False
 dados_extrato = []
+validacao_menu = False
 def menu():
     while True:
         if conta_bloqueada == False:
@@ -23,19 +53,25 @@ def menu():
         
             if opcao == "1":
                 cadastrar_conta_corrente()
-            elif opcao == "2":
+            elif opcao == "2" and validacao_menu == True:
                 depositar()
-            elif opcao == "3":
+            elif opcao == "3" and validacao_menu == True:
                 sacar()
-            elif opcao == "4":
+            elif opcao == "4" and validacao_menu == True:
                 consultar_saldo()
-            elif opcao == "5":
+            elif opcao == "5" and validacao_menu == True:
                 consultar_extrato()
             elif opcao == "6":
-                print("Finalizando o programa...")
-                break
+                os.system('cls||clear')
+                print('-'*17)
+                print('MACK BANK – SOBRE')
+                print('-'*17)
+                print('\nEste pograma foi desenvolvido por:')
+                print('Nicolas Oliveira Lacerda')
+                print('RA: 10425260')
+                exit('MUITO OBRIGADO POR ACESSAR O MACKBANK! VOLTE SEMPRE!\n')
             else:
-                print("Opção inválida. Por favor, escolha uma opção válida.")
+                print("OPÇÃO INVÁLIDA. POR FAVOR, ESCOLHA UMA OPÇÃO VÁLIDA.")
         else:
             print()
             print('MACK BANK – ESCOLHA UMA OPÇÃO'
@@ -54,11 +90,15 @@ def menu():
                 depositar()
             elif opcao == "6":
                 os.system('cls||clear')
-                print("FINALIZANDO PROGRAMA...")
-                print('PROGRAMA FINALIZADO. OBRIGADO POR ACESSAR O MACKBANK!')
-                break
+                print('-'*17)
+                print('MACK BANK – SOBRE')
+                print('-'*17)
+                print('\nEste pograma foi desenvolvido por:')
+                print('Nicolas Oliveira Lacerda')
+                print('RA: 10425260')
+                exit('MUITO OBRIGADO POR ACESSAR O MACKBANK! VOLTE SEMPRE!\n')
             else:
-                print("Opção inválida. Por favor, escolha uma opção válida.")
+                print("OPÇÃO INVÁLIDA. POR FAVOR, ESCOLHA UMA OPÇÃO VÁLIDA.")
 
 # CADASTRO
 
@@ -66,6 +106,11 @@ def cadastrar_conta_corrente():
     numero_da_conta = random.randint(1000,10000)
     cadastro_salvo = 0
     os.system('cls||clear')
+    boas_vindas = 'BEM VINDO AO MACKBANK!'
+    print(len(boas_vindas)*'-')
+    print(boas_vindas)
+    print(len(boas_vindas)*'-')
+    
 
     while True:
         print(f'NÚMERO DA CONTA: {numero_da_conta}')
@@ -76,7 +121,7 @@ def cadastrar_conta_corrente():
         else:
             nome_cliente = input('NOME DO CLIENTE: ')
             if nome_cliente == '':
-                print('-'*33,'\n','ESTE CAMPO PRECISA SER PREENCHIDO','\n','-'*33)
+                print('-'*33,'\nESTE CAMPO PRECISA SER PREENCHIDO\n','-'*33)
                 continue
             else:
                 cadastro_salvo += 1
@@ -87,7 +132,7 @@ def cadastrar_conta_corrente():
         else:
             telefone = input('TELEFONE.......: ')
             if telefone == '':
-                print('-'*33,'\n','ESTE CAMPO PRECISA SER PREENCHIDO','\n','-'*33)
+                print('-'*33,'\nESTE CAMPO PRECISA SER PREENCHIDO\n','-'*33)
                 continue
             else:
                 cadastro_salvo += 1
@@ -99,7 +144,7 @@ def cadastrar_conta_corrente():
         else:
             email = input('EMAIL..........: ')
             if email == '':
-                print('-'*33,'\n','ESTE CAMPO PRECISA SER PREENCHIDO','\n','-'*33)
+                print('-'*33,'\nESTE CAMPO PRECISA SER PREENCHIDO\n','-'*33)
                 continue
             else:
                 cadastro_salvo += 1
@@ -111,7 +156,7 @@ def cadastrar_conta_corrente():
         else:
             saldo_inicial = float(input('SALDO INICIAL...: '))
             if saldo_inicial < 1000:
-                print('-'*49,'\n','O SALDO INICIAL NÃO PODE SER INFERIOR A R$1000,00','\n','-'*49) 
+                print('-'*49,'\nO SALDO INICIAL NÃO PODE SER INFERIOR A R$1000,00\n','-'*49) 
                 continue
             else:
                 cadastro_salvo += 1
@@ -123,18 +168,18 @@ def cadastrar_conta_corrente():
         else:
             limite_de_credito = float(input('LIMITE DE CRÉDITO: '))
             if limite_de_credito < 0:
-                print('-'*49,'\n','O LIMITE DE CRÉDITO NÃO PODE SER MENOR QUE R$0,00','\n','-'*49)
+                print('-'*49,'\nO LIMITE DE CRÉDITO NÃO PODE SER MENOR QUE R$0,00\n','-'*49)
                 continue
             else:
                 cadastro_salvo += 1
 
         if cadastro_salvo >= 6:
-            print(f'SENHA............: {senha}')
+            print('SENHA............: ******')
             pass
         else:
-            senha = input('SENHA (6 CARACTERES): ')
+            senha = senha_digitada('SENHA (6 CARACTERES): ')
             if len(senha) < 6 or len(senha) > 6:
-                print('-'*37,'\n','A SENHA DEVE CONTER APENAS 6 CARACTERES','\n','-'*37)
+                print('-'*37,'\nA SENHA DEVE CONTER APENAS 6 CARACTERES\n','-'*37)
                 continue
             else:
                 cadastro_salvo += 1
@@ -145,17 +190,22 @@ def cadastrar_conta_corrente():
             print(f'REPITA A SENHA...: {repetir_senha}')
             pass
         else:
-            repetir_senha = input('REPITA A SENHA...: ')
+            repetir_senha = senha_digitada('REPITA A SENHA...: ')
             if repetir_senha != senha:
-                print('-'*23,'\n','AS SENHAS NÃO COINCIDEM','\n','-'*23)
+                print('-'*23,'\nAS SENHAS NÃO COINCIDEM','\n','-'*23)
                 continue
             else:
                 os.system('cls')
+                print(f'SALVE O NÚMERO DA SUA CONTA: {numero_da_conta}')
                 fim_cadastro = input('CADASTRO REALIZADO! PRESSIONE *enter* PARA VOLTAR AO MENU...')
+                global validacao_menu
+                validacao_menu = True
                 if fim_cadastro == '':
+                    os.system('cls||clear')
                     menu()
                     break
                 else:
+                    os.system('cls||clear')
                     menu()
                     break
 
@@ -179,14 +229,17 @@ def depositar():
                 else:
                     confirmar_deposito = input(f'CONFIRMAR DEPÓSITO NO VALOR DE {deposito} ? SIM(S) NÃO(N): ').upper()
                     if confirmar_deposito == 'S':
+                        dados_extrato.append(deposito)
                         saldo_inicial = dados_cadastro[4]
                         saldo_atual = saldo_inicial + deposito
                         dados_cadastro[4] = saldo_atual
                         voltando_menu = input('DEPÓSITO CONFIRMADO! PRESSIONE *ENTER* PARA VOLTAR AO MENU')
                         if voltando_menu == '':
+                            os.system('cls||clear')
                             menu()
                             break
                         else:
+                            os.system('cls||clear')
                             menu()
                             break
                     else:
@@ -230,7 +283,7 @@ def sacar():
                 if senha_acertada > 0:
                     pass
                 else:
-                    senha = input('DIGITE A SENHA: ')
+                    senha = senha_digitada('DIGITE A SENHA: ')
                 if senha == senha_certa:
                     senha_acertada += 1
                     saque  = float(input('DIGITE O VALOR DO SAQUE: '))
@@ -243,30 +296,31 @@ def sacar():
                     elif saque > saldo_inicial and saque <= (saldo_inicial + credito):
                         print('VOCÊ ESTÁ USANDO TODO SEU SALDO E O SEU LIMITE DE CRÉDITO')
                         usando_credito_e_saldo = True
-                    elif saque > saldo_inicial and saque <= credito :
-                        print('VOCÊ ESTÁ USANDO O SEU LIMITE DE CRÉDITO')
-                        usando_credito = True
                     elif saque > saldo_inicial and saque > credito:
                         print('VOCÊ NÃO POSSUI SALDO SUFICIENTE PARA ESSA TRANSAÇÃO')
                         continue
-                    if saque <= saldo_inicial or usando_credito_e_saldo == True or usando_credito == True:
+                    if saque <= saldo_inicial or usando_credito_e_saldo == True:
                         confirmar_saque = input(f'CONFIRMAR SAQUE NO VALOR DE {saque} ? SIM(S) NÃO(N): ').upper()
                         if confirmar_saque == 'S':
+                            dados_extrato.append(-saque)
                             if usando_credito == True:
                                 credito_atual = credito - saque
                                 dados_cadastro[5] = credito_atual
                             elif usando_credito_e_saldo == True:
-                                dados_cadastro[4] = 0
-                                credito_atual = credito - saque
+                                saldo_atual = saldo_inicial - saque
+                                dados_cadastro[4] = saldo_atual
+                                credito_atual = credito - (saque - saldo_inicial)
                                 dados_cadastro[5] = credito_atual
                             else:
                                 saldo_atual = saldo_inicial - saque
                                 dados_cadastro[4] = saldo_atual
                             voltando_menu = input('SAQUE CONFIRMADO! PRESSIONE *ENTER* PARA VOLTAR AO MENU')
                             if voltando_menu == '':
+                                os.system('cls||clear')
                                 menu()
                                 break
                             else:
+                                os.system('cls||clear')
                                 menu()
                                 break
                         else:
@@ -308,16 +362,21 @@ def consultar_saldo():
         if numero_certo == numero_digitado:
             print(f'NOME DO CLIENTE: {nome_cliente}')
             while tentativas <= 3:
-                senha = input('DIGITE A SENHA: ')
+                senha = senha_digitada('DIGITE A SENHA: ')
                 if senha == senha_certa:
 
-                    print(f'SALDO DA CONTA: R${dados_cadastro[4]}')
+                    print(f'SALDO DA CONTA: R${dados_cadastro[4]}'
+                          '\n')
+                    if dados_cadastro[4] < 0:
+                        print('SUA CONTA ESTÁ COM SALDO NEGATIVO')
                     print(f'SALDO DE CRÉDITO: {dados_cadastro[5]}')
                     voltar_ao_menu = input('PRESSIONE *ENTER* PARA VOLTAR AO MENU: ')
                     if voltar_ao_menu == '':
+                        os.system('cls||clear')
                         menu()
                         break
                     else:
+                        os.system('cls||clear')
                         menu()
                         break   
 
@@ -355,16 +414,26 @@ def consultar_extrato():
         if numero_certo == numero_digitado:
             print(f'NOME DO CLIENTE: {nome_cliente}')
             while tentativas <= 3:
-                senha = input('DIGITE A SENHA: ')
+                senha = senha_digitada('DIGITE A SENHA: ')
                 if senha == senha_certa:
-
-                    print(f'SALDO DA CONTA: R${dados_cadastro[4]}')
                     print(f'SALDO DE CRÉDITO: {dados_cadastro[5]}')
+                    for valores in dados_extrato:
+                        if valores < 0:
+                            print(f'SAQUE REALIZADO NO VALOR DE R${-valores}'
+                                  '\n')
+                        else:
+                            print(f'DEPÓSITO REALIZADO NO VALOR DE R${valores}'
+                                  '\n')
+                    print(f'SALDO DA CONTA: {dados_cadastro[4]}')
+                    if dados_cadastro[4] < 0:
+                        print('ATENÇÃO AO SEU SALDO!!')
                     voltar_ao_menu = input('PRESSIONE *ENTER* PARA VOLTAR AO MENU: ')
                     if voltar_ao_menu == '':
+                        os.system('cls||clear')
                         menu()
                         break
                     else:
+                        os.system('cls||clear')
                         menu()
                         break   
 
