@@ -36,6 +36,7 @@ dados_cadastro = []
 conta_bloqueada = False
 dados_extrato = []
 validacao_menu = False
+
 def menu():
     while True:
         if conta_bloqueada == False:
@@ -81,14 +82,17 @@ def menu():
             print('(̶3̶)̶ S̶A̶C̶A̶R̶  : OPÇÃO BLOQUEADA')
             print('(̶4̶)̶ C̶O̶N̶S̶U̶L̶T̶A̶R̶ S̶A̶L̶D̶O̶  : OPÇÃO BLOQUEADA')
             print('(̶5̶)̶ C̶O̶N̶S̶U̶L̶T̶A̶R̶ E̶X̶T̶R̶A̶T̶O̶  : OPÇÃO BLOQUEADA')
-            print('(6) FINALIZAR'
+            print('(6) DESBLOQUEAR CONTA')
+            print('(7) FINALIZAR'
                 '\n')
             opcao = input('SUA OPÇÃO: ')
             if opcao == "1":
                 cadastrar_conta_corrente()
             elif opcao == "2":
                 depositar()
-            elif opcao == "6":
+            elif opcao == '6':
+                desbloquear_conta()
+            elif opcao == "7":
                 os.system('cls||clear')
                 print('-'*17)
                 print('MACK BANK – SOBRE')
@@ -104,6 +108,7 @@ def menu():
 
 def cadastrar_conta_corrente():
     numero_da_conta = random.randint(1000,10000)
+    token_recuperacao = random.randint(10000000,99999999)
     cadastro_salvo = 0
     os.system('cls||clear')
     boas_vindas = 'BEM VINDO AO MACKBANK!'
@@ -183,7 +188,7 @@ def cadastrar_conta_corrente():
             else:
                 cadastro_salvo += 1
 
-        dados_cadastro.extend([numero_da_conta, nome_cliente, telefone, email, saldo_inicial, limite_de_credito, senha])        
+        dados_cadastro.extend([numero_da_conta, nome_cliente, telefone, email, saldo_inicial, limite_de_credito, senha, token_recuperacao])        
 
         if cadastro_salvo >= 7:
             print(f'REPITA A SENHA...: {repetir_senha}')
@@ -196,6 +201,8 @@ def cadastrar_conta_corrente():
             else:
                 os.system('cls')
                 print(f'SALVE O NÚMERO DA SUA CONTA: {numero_da_conta}')
+                print(f'SALVE O TOKEN DE RECUPERAÇÃO DA CONTA EM CASO DE BLOQUEIO: {token_recuperacao}')
+                print('VOCÊ SÓ PODERÁ DESBLOQUEAR A CONTA COM O TOKEN DE RECUPERAÇÃO')
                 fim_cadastro = input('CADASTRO REALIZADO! PRESSIONE *enter* PARA VOLTAR AO MENU...')
                 global validacao_menu
                 validacao_menu = True
@@ -449,5 +456,48 @@ def consultar_extrato():
             print(alerta)
             print(len(alerta)*'-')
             continue
+
+def desbloquear_conta():
+    os.system('cls||clear')
+    numero_certo = dados_cadastro[0]
+    token_certo = dados_cadastro[7]
+    print(dados_cadastro[0])
+    while True:
+        numero_digitado = int(input('DIGITE O NÚMERO DA CONTA: '))
+        if numero_certo == numero_digitado:
+            print(f'NOME DO CLIENTE: {dados_cadastro[1]}')
+            token_digitado = int(input('DIGITE O TOKEN PARA RECUPERAÇÃO DA CONTA: '))
+            if token_digitado == token_certo:
+                while True:
+                    nova_senha = senha_digitada('DIGITE A NOVA SENHA (6 CARACTERES): ')
+                    if nova_senha == '' or len(nova_senha) > 6 or len(nova_senha) < 6:
+                        print('A SENHA DIGITADA NÃO ATENDE AOS PADRÕES EXIGIDOS. POR FAVOR DIGITE UMA SENHA VÁLIDA')
+                        continue
+                    else:
+                        confirmar_senha = senha_digitada('CONFIRME A SENHA: ')
+                        if nova_senha == confirmar_senha:
+                            print('SENHA ATUALIZADA COM SUCESSO!\n')
+                            dados_cadastro[6] = nova_senha
+                            global conta_bloqueada
+                            conta_bloqueada = False
+                            voltar_ao_menu = input('PRESSIONE *ENTER* PARA VOLTAR AO MENU: ')
+                            if voltar_ao_menu == '':
+                                os.system('cls||clear')
+                                menu()
+                                break
+                            else:
+                                os.system('cls||clear')
+                                menu()
+                                break 
+                        else:
+                            print('AS SENHAS NÃO COINCIDEM')
+                            continue
+            else:
+                print('NÚMERO DE TOKEN INVÁLIDO. DIGITE UM NÚMERO DE TOKEN VÁLIDO PARA PROSSEGUIR')
+                continue
+        else:
+            print('NÚMERO DE CONTA INEXISTENTE. DIGITE UM NÚMERO VÁLIDO PARA PROSSEGUIR')
+            continue
+        pass
 
 menu()
