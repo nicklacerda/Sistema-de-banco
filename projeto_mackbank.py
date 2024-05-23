@@ -224,7 +224,6 @@ def depositar():
     print(numero_certo)
     while True:
         numero_digitado = int(input('DIGITE O NÚMERO DA CONTA: '))
-        print(f'Número digitado: {numero_digitado}')
         if numero_certo == numero_digitado:
             print(f'NOME DO CLIENTE: {nome_cliente}')
             while True:
@@ -282,7 +281,6 @@ def sacar():
                     menu()
                     break
         numero_digitado = int(input('DIGITE O NÚMERO DA CONTA: '))
-        print(f'Número digitado: {numero_digitado}')
         if numero_certo == numero_digitado:
             print(f'NOME DO CLIENTE: {nome_cliente}')
             while tentativas <= 3:
@@ -364,7 +362,6 @@ def consultar_saldo():
                     menu()
                     break
         numero_digitado = int(input('DIGITE O NÚMERO DA CONTA: '))
-        print(f'Número digitado: {numero_digitado}')
         if numero_certo == numero_digitado:
             print(f'NOME DO CLIENTE: {nome_cliente}')
             while tentativas <= 3:
@@ -416,7 +413,6 @@ def consultar_extrato():
                     menu()
                     break
         numero_digitado = int(input('DIGITE O NÚMERO DA CONTA: '))
-        print(f'Número digitado: {numero_digitado}')
         if numero_certo == numero_digitado:
             print(f'NOME DO CLIENTE: {nome_cliente}')
             while tentativas <= 3:
